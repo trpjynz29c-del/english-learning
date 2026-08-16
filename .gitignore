@@ -1,0 +1,5 @@
+# 开发过程中的临时文件，不推送
+.browser-check/
+.edge-test-profile/
+prompt*.txt
+kaoyan-data.js
