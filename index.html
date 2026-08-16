@@ -1,0 +1,2750 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="theme-color" content="#168a78">
+  <title>英语零基础乐园</title>
+  <style>
+    :root {
+      --ink: #18324a;
+      --muted: #657487;
+      --canvas: #f5f8fb;
+      --surface: #ffffff;
+      --line: #dce4ed;
+      --teal: #168a78;
+      --teal-dark: #0e6e61;
+      --teal-soft: #e7f5f1;
+      --coral: #e66b4f;
+      --coral-soft: #fff0eb;
+      --gold: #f2c14e;
+      --gold-soft: #fff8dc;
+      --blue: #4279a4;
+      --blue-soft: #eaf2f8;
+      --danger: #c74848;
+      --shadow: 0 16px 40px rgba(24, 50, 74, 0.09);
+      --shadow-soft: 0 8px 22px rgba(24, 50, 74, 0.07);
+      --radius: 8px;
+    }
+
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
+
+    body {
+      margin: 0;
+      min-width: 280px;
+      min-height: 100vh;
+      color: var(--ink);
+      background: var(--canvas);
+      font-family: "PingFang SC", "Microsoft YaHei", "Noto Sans CJK SC", system-ui, sans-serif;
+      line-height: 1.55;
+      letter-spacing: 0;
+    }
+
+    button {
+      font: inherit;
+      letter-spacing: 0;
+    }
+
+    button:focus-visible,
+    [tabindex="0"]:focus-visible {
+      outline: 3px solid rgba(22, 138, 120, 0.35);
+      outline-offset: 3px;
+    }
+
+    .app-shell {
+      width: min(1120px, calc(100% - 32px));
+      margin: 0 auto;
+      padding: 22px 0 42px;
+    }
+
+    .topbar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 20px 24px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      min-width: 0;
+    }
+
+    .brand-mark {
+      display: grid;
+      flex: 0 0 52px;
+      width: 52px;
+      height: 52px;
+      place-items: center;
+      color: #fff;
+      background: var(--teal);
+      border-radius: 8px;
+      font-family: Georgia, "Times New Roman", serif;
+      font-size: 27px;
+      font-weight: 800;
+      line-height: 1;
+    }
+
+    .brand h1 {
+      margin: 0;
+      font-size: clamp(1.15rem, 2.2vw, 1.55rem);
+      line-height: 1.2;
+    }
+
+    .brand p {
+      margin: 5px 0 0;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .header-stats {
+      display: flex;
+      align-items: stretch;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .stat-chip {
+      min-width: 112px;
+      padding: 10px 14px;
+      background: var(--blue-soft);
+      border: 1px solid #d8e7f1;
+      border-radius: var(--radius);
+      text-align: left;
+    }
+
+    .stat-chip:first-child {
+      background: var(--teal-soft);
+      border-color: #cfe9e3;
+    }
+
+    .stat-chip span {
+      display: block;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .stat-chip strong {
+      display: inline-block;
+      margin-top: 2px;
+      font-size: 1.35rem;
+      line-height: 1.15;
+    }
+
+    .stat-chip small {
+      color: var(--muted);
+      font-size: 0.75rem;
+    }
+
+    .main-tabs {
+      display: flex;
+      gap: 6px;
+      margin: 18px 0 14px;
+      padding: 5px;
+      overflow-x: auto;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+      scrollbar-width: thin;
+    }
+
+    .tab-button {
+      display: inline-flex;
+      flex: 1 0 auto;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 46px;
+      padding: 9px 17px;
+      color: #42566b;
+      background: transparent;
+      border: 0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .tab-button:hover {
+      background: #f0f5f8;
+    }
+
+    .tab-button[aria-selected="true"] {
+      color: var(--teal-dark);
+      background: var(--teal-soft);
+    }
+
+    .view {
+      display: none;
+      min-height: 420px;
+      padding: 24px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow-soft);
+    }
+
+    .view.is-active {
+      display: block;
+      animation: view-in 220ms ease-out;
+    }
+
+    @keyframes view-in {
+      from {
+        opacity: 0;
+        transform: translateY(5px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .section-heading {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 18px;
+      margin-bottom: 18px;
+    }
+
+    .section-heading h2 {
+      margin: 0;
+      font-size: clamp(1.25rem, 2.5vw, 1.65rem);
+      line-height: 1.25;
+    }
+
+    .section-heading p {
+      max-width: 680px;
+      margin: 7px 0 0;
+      color: var(--muted);
+    }
+
+    .section-badge {
+      display: inline-flex;
+      align-items: center;
+      min-height: 28px;
+      padding: 5px 10px;
+      color: var(--coral);
+      background: var(--coral-soft);
+      border: 1px solid #ffd9ce;
+      border-radius: 999px;
+      font-size: 0.78rem;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .theme-filters {
+      display: flex;
+      gap: 8px;
+      margin: 20px 0 18px;
+      overflow-x: auto;
+      scrollbar-width: thin;
+    }
+
+    .theme-filter {
+      min-height: 38px;
+      padding: 8px 14px;
+      color: var(--ink);
+      background: #f5f8fb;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+
+    .theme-filter:hover {
+      border-color: #aab7c5;
+    }
+
+    .theme-filter.is-active {
+      color: #fff;
+      background: var(--teal);
+      border-color: var(--teal);
+    }
+
+    .card-stage {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 13px;
+    }
+
+    .card-controls {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      width: 100%;
+      max-width: 560px;
+    }
+
+    .icon-button,
+    .small-button,
+    .primary-button,
+    .option-button,
+    .be-option {
+      border: 0;
+      cursor: pointer;
+      transition: background-color 150ms ease, border-color 150ms ease, transform 150ms ease, color 150ms ease;
+    }
+
+    .icon-button:active,
+    .small-button:active,
+    .primary-button:active,
+    .option-button:active,
+    .be-option:active {
+      transform: translateY(1px);
+    }
+
+    .icon-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 6px;
+      min-height: 38px;
+      padding: 7px 11px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border: 1px solid #d8e7f1;
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    .speaker-icon {
+      position: relative;
+      display: inline-block;
+      width: 17px;
+      height: 16px;
+      flex: 0 0 17px;
+    }
+
+    .speaker-icon::before {
+      position: absolute;
+      top: 3px;
+      left: 3px;
+      width: 5px;
+      height: 10px;
+      content: "";
+      background: currentColor;
+      border-radius: 2px 0 0 2px;
+    }
+
+    .speaker-icon::after {
+      position: absolute;
+      top: 5px;
+      left: 2px;
+      width: 0;
+      height: 0;
+      content: "";
+      border-top: 3px solid transparent;
+      border-bottom: 3px solid transparent;
+      border-right: 7px solid currentColor;
+    }
+
+    .icon-button:hover {
+      background: #dcebf5;
+    }
+
+    .icon-button.speaking {
+      color: #8a5a00;
+      background: var(--gold-soft);
+      border-color: #f2d174;
+    }
+
+    .small-button {
+      min-height: 38px;
+      padding: 7px 13px;
+      color: var(--ink);
+      background: #f5f8fb;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-weight: 700;
+    }
+
+    .small-button:hover {
+      border-color: #aab7c5;
+    }
+
+    .small-button:disabled {
+      color: #a0aab4;
+      background: #f4f6f8;
+      border-color: #e7ebef;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .card-counter {
+      min-width: 76px;
+      color: var(--muted);
+      font-size: 0.9rem;
+      text-align: center;
+    }
+
+    .flashcard-shell {
+      width: min(100%, 560px);
+      height: 415px;
+      perspective: 1200px;
+    }
+
+    .flashcard {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      transform-style: preserve-3d;
+      transition: transform 520ms cubic-bezier(0.2, 0.72, 0.3, 1);
+      cursor: pointer;
+    }
+
+    .flashcard.is-flipped {
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-face {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 28px;
+      backface-visibility: hidden;
+      -webkit-backface-visibility: hidden;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      text-align: center;
+    }
+
+    .flashcard-front {
+      color: var(--ink);
+      background: #fff;
+    }
+
+    .flashcard-front::before {
+      position: absolute;
+      top: 18px;
+      left: 18px;
+      width: 8px;
+      height: 8px;
+      content: "";
+      background: var(--coral);
+      border-radius: 50%;
+    }
+
+    .flashcard-back {
+      color: var(--ink);
+      background: var(--gold-soft);
+      transform: rotateY(180deg);
+    }
+
+    .card-theme {
+      display: inline-flex;
+      align-items: center;
+      min-height: 26px;
+      padding: 4px 9px;
+      color: var(--blue);
+      background: var(--blue-soft);
+      border-radius: 999px;
+      font-size: 0.8rem;
+      font-weight: 700;
+    }
+
+    .card-word {
+      margin-top: 19px;
+      font-size: clamp(2.25rem, 9vw, 4rem);
+      font-weight: 800;
+      line-height: 1.05;
+      overflow-wrap: anywhere;
+    }
+
+    .card-word-sub {
+      margin-top: 9px;
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .card-hint {
+      margin-top: 25px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .card-meaning {
+      margin-top: 8px;
+      color: var(--coral);
+      font-size: clamp(1.65rem, 7vw, 2.4rem);
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .card-example {
+      max-width: 430px;
+      margin-top: 18px;
+      color: var(--ink);
+      font-size: 1.05rem;
+      font-weight: 700;
+      line-height: 1.45;
+    }
+
+    .card-example-cn {
+      margin-top: 7px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .card-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 9px;
+      margin-top: 20px;
+    }
+
+    .learned-button {
+      min-height: 38px;
+      padding: 7px 13px;
+      color: var(--teal-dark);
+      background: #fff;
+      border: 1px solid var(--teal);
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .learned-button.is-learned {
+      color: #fff;
+      background: var(--teal);
+    }
+
+    .card-help {
+      color: var(--muted);
+      font-size: 0.82rem;
+      text-align: center;
+    }
+
+    .quiz-shell,
+    .be-shell,
+    .spelling-shell {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) 240px;
+      gap: 22px;
+      align-items: start;
+    }
+
+    .question-card {
+      padding: 22px;
+      background: #fbfdfe;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .quiz-progress {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      color: var(--muted);
+      font-size: 0.9rem;
+    }
+
+    .progress-track {
+      width: min(180px, 42%);
+      height: 8px;
+      overflow: hidden;
+      background: #e5ebf1;
+      border-radius: 999px;
+    }
+
+    .progress-fill {
+      width: 0;
+      height: 100%;
+      background: var(--teal);
+      border-radius: inherit;
+      transition: width 250ms ease;
+    }
+
+    .question-label {
+      margin: 22px 0 9px;
+      color: var(--blue);
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .question-sentence {
+      margin: 0;
+      font-size: clamp(1.3rem, 4vw, 1.75rem);
+      font-weight: 800;
+      line-height: 1.45;
+      overflow-wrap: anywhere;
+    }
+
+    .question-sentence mark {
+      display: inline-block;
+      min-width: 74px;
+      margin: 0 3px;
+      padding: 2px 8px;
+      color: var(--coral);
+      background: var(--coral-soft);
+      border-bottom: 3px solid var(--coral);
+      border-radius: 5px 5px 2px 2px;
+      text-align: center;
+    }
+
+    .spelling-sentence {
+      display: block;
+      min-height: 78px;
+      padding: 18px;
+      color: var(--ink);
+      background: var(--teal-soft);
+      border: 1px solid #cae7e1;
+      border-radius: var(--radius);
+      text-align: center;
+    }
+
+    .spelling-form {
+      display: grid;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    .spelling-label {
+      color: var(--blue);
+      font-size: 0.86rem;
+      font-weight: 800;
+    }
+
+    .spelling-input {
+      width: 100%;
+      min-height: 64px;
+      max-height: 140px;
+      padding: 13px 15px;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font: inherit;
+      font-size: clamp(1rem, 3vw, 1.2rem);
+      font-weight: 700;
+      line-height: 1.45;
+      resize: vertical;
+    }
+
+    .spelling-input::placeholder {
+      color: #97a4b1;
+      font-weight: 500;
+    }
+
+    .spelling-input:focus {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(22, 138, 120, 0.16);
+      outline: 0;
+    }
+
+    .spelling-input:disabled {
+      color: var(--muted);
+      background: #f4f6f8;
+      cursor: not-allowed;
+    }
+
+    .spelling-actions {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .spelling-actions .primary-button {
+      flex: 1 1 auto;
+    }
+
+    .icon-button:disabled {
+      color: #9ba7b1;
+      background: #f0f3f5;
+      border-color: #e2e7eb;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .option-list {
+      display: grid;
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .option-button,
+    .be-option {
+      min-height: 50px;
+      padding: 11px 16px;
+      color: var(--ink);
+      background: #fff;
+      border: 1px solid var(--line);
+      border-radius: 6px;
+      font-weight: 800;
+      text-align: left;
+    }
+
+    .option-button:hover,
+    .be-option:hover {
+      background: var(--teal-soft);
+      border-color: #a8d8ce;
+    }
+
+    .option-button:disabled,
+    .be-option:disabled {
+      cursor: default;
+      opacity: 1;
+    }
+
+    .option-button.is-correct,
+    .be-option.is-correct {
+      color: #0b675a;
+      background: var(--teal-soft);
+      border-color: var(--teal);
+    }
+
+    .option-button.is-wrong,
+    .be-option.is-wrong {
+      color: var(--danger);
+      background: #fff1ef;
+      border-color: #e6a39b;
+    }
+
+    .feedback {
+      display: none;
+      margin-top: 18px;
+      padding: 15px 16px;
+      background: var(--teal-soft);
+      border-left: 4px solid var(--teal);
+      border-radius: 6px;
+      font-size: 0.92rem;
+    }
+
+    .feedback.is-visible {
+      display: block;
+      animation: view-in 180ms ease-out;
+    }
+
+    .feedback[data-result="wrong"] {
+      background: #fff3f0;
+      border-left-color: var(--coral);
+    }
+
+    .feedback strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--teal-dark);
+      font-size: 1rem;
+    }
+
+    .feedback[data-result="wrong"] strong {
+      color: var(--coral);
+    }
+
+    .feedback p {
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .next-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-top: 18px;
+    }
+
+    .primary-button {
+      min-height: 44px;
+      padding: 10px 18px;
+      color: #fff;
+      background: var(--teal);
+      border-radius: 6px;
+      font-weight: 800;
+    }
+
+    .primary-button:hover {
+      background: var(--teal-dark);
+    }
+
+    .primary-button:disabled {
+      background: #a9c7c1;
+      cursor: not-allowed;
+      transform: none;
+    }
+
+    .side-card {
+      padding: 18px;
+      background: var(--gold-soft);
+      border: 1px solid #f0dc9d;
+      border-radius: var(--radius);
+    }
+
+    .side-card h3 {
+      margin: 0 0 8px;
+      color: #755b17;
+      font-size: 1rem;
+    }
+
+    .side-card p {
+      margin: 0;
+      color: #5c5845;
+      font-size: 0.86rem;
+    }
+
+    .rule-card {
+      padding: 18px;
+      background: var(--teal-soft);
+      border: 1px solid #cae7e1;
+      border-radius: var(--radius);
+    }
+
+    .rule-card h3 {
+      margin: 0 0 8px;
+      color: var(--teal-dark);
+      font-size: 1.05rem;
+    }
+
+    .rule-card p {
+      margin: 0;
+      color: var(--ink);
+    }
+
+    .be-options {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-top: 22px;
+    }
+
+    .be-option {
+      text-align: center;
+    }
+
+    .complete-panel {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 340px;
+      padding: 24px;
+      text-align: center;
+    }
+
+    .complete-panel[hidden] {
+      display: none;
+    }
+
+    .complete-mark {
+      display: grid;
+      width: 68px;
+      height: 68px;
+      place-items: center;
+      color: #fff;
+      background: var(--teal);
+      border-radius: 50%;
+      font-size: 1.9rem;
+      font-weight: 800;
+    }
+
+    .complete-panel h3 {
+      margin: 19px 0 7px;
+      font-size: 1.5rem;
+    }
+
+    .complete-panel p {
+      margin: 0;
+      color: var(--muted);
+    }
+
+    .complete-score {
+      margin-top: 12px;
+      color: var(--coral) !important;
+      font-size: 1.2rem;
+      font-weight: 800;
+    }
+
+    .complete-panel .primary-button {
+      margin-top: 20px;
+    }
+
+    .progress-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
+      margin-top: 22px;
+    }
+
+    .metric-card {
+      padding: 18px;
+      background: #fbfdfe;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .metric-card span {
+      color: var(--muted);
+      font-size: 0.83rem;
+    }
+
+    .metric-card strong {
+      display: block;
+      margin-top: 7px;
+      font-size: 1.75rem;
+      line-height: 1.1;
+    }
+
+    .progress-detail {
+      margin-top: 20px;
+      padding: 18px;
+      background: #fbfdfe;
+      border: 1px solid var(--line);
+      border-radius: var(--radius);
+    }
+
+    .progress-detail h3 {
+      margin: 0 0 14px;
+      font-size: 1rem;
+    }
+
+    .theme-progress-list {
+      display: grid;
+      gap: 12px;
+    }
+
+    .theme-progress-row {
+      display: grid;
+      grid-template-columns: 76px minmax(0, 1fr) 55px;
+      align-items: center;
+      gap: 10px;
+      color: var(--muted);
+      font-size: 0.86rem;
+    }
+
+    .theme-progress-row .row-label {
+      color: var(--ink);
+      font-weight: 700;
+    }
+
+    .theme-progress-row .row-value {
+      text-align: right;
+    }
+
+    .bar {
+      height: 9px;
+      overflow: hidden;
+      background: #e6ebf0;
+      border-radius: 999px;
+    }
+
+    .bar-fill {
+      height: 100%;
+      background: var(--gold);
+      border-radius: inherit;
+      transition: width 300ms ease;
+    }
+
+    .bar-fill.is-green {
+      background: var(--teal);
+    }
+
+    .storage-hint {
+      margin-top: 16px;
+      color: var(--muted);
+      font-size: 0.8rem;
+    }
+
+    .reset-button {
+      min-height: 42px;
+      margin-top: 18px;
+      padding: 9px 15px;
+      color: var(--danger);
+      background: #fff6f4;
+      border: 1px solid #ecc7c0;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 700;
+    }
+
+    .reset-button:hover {
+      background: #fff0ed;
+    }
+
+    .toast {
+      position: fixed;
+      right: 20px;
+      bottom: 20px;
+      z-index: 20;
+      max-width: min(340px, calc(100% - 40px));
+      padding: 12px 15px;
+      color: #fff;
+      background: #1d3a52;
+      border-radius: 6px;
+      box-shadow: var(--shadow);
+      font-size: 0.9rem;
+      opacity: 0;
+      pointer-events: none;
+      transform: translateY(12px);
+      transition: opacity 180ms ease, transform 180ms ease;
+    }
+
+    .toast.is-visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .app-footer {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 14px;
+      color: var(--muted);
+      font-size: 0.78rem;
+    }
+
+    .app-footer .status-dot {
+      display: inline-block;
+      width: 7px;
+      height: 7px;
+      margin-right: 5px;
+      background: var(--teal);
+      border-radius: 50%;
+    }
+
+    @media (max-width: 760px) {
+      .app-shell {
+        width: min(100% - 20px, 1120px);
+        padding-top: 10px;
+      }
+
+      .topbar {
+        align-items: flex-start;
+        flex-direction: column;
+        gap: 14px;
+        padding: 17px 16px;
+      }
+
+      .header-stats {
+        width: 100%;
+      }
+
+      .stat-chip {
+        flex: 1;
+        min-width: 0;
+      }
+
+      .view {
+        padding: 18px 14px;
+      }
+
+      .section-heading {
+        flex-direction: column;
+        gap: 9px;
+      }
+
+      .quiz-shell,
+      .be-shell,
+      .spelling-shell {
+        grid-template-columns: 1fr;
+        gap: 14px;
+      }
+
+      .side-card {
+        order: -1;
+      }
+
+      .progress-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .progress-grid .metric-card:last-child {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .app-shell {
+        width: 100%;
+        padding-top: 0;
+      }
+
+      .topbar,
+      .view {
+        border-radius: 0;
+      }
+
+      .brand-mark {
+        flex-basis: 44px;
+        width: 44px;
+        height: 44px;
+        font-size: 22px;
+      }
+
+      .brand p {
+        font-size: 0.8rem;
+      }
+
+      .main-tabs {
+        margin-top: 8px;
+      }
+
+      .tab-button {
+        min-height: 44px;
+        padding: 8px 12px;
+        font-size: 0.9rem;
+      }
+
+      .section-badge {
+        align-self: flex-start;
+      }
+
+      .flashcard-shell {
+        height: 440px;
+      }
+
+      .flashcard-face {
+        padding: 22px 16px;
+      }
+
+      .card-controls {
+        gap: 6px;
+      }
+
+      .icon-button {
+        padding-inline: 9px;
+      }
+
+      .small-button {
+        padding-inline: 10px;
+      }
+
+      .question-card {
+        padding: 17px 14px;
+      }
+
+      .be-options {
+        gap: 7px;
+      }
+
+      .be-option {
+        padding-inline: 8px;
+      }
+
+      .progress-grid {
+        gap: 9px;
+      }
+
+      .metric-card {
+        padding: 13px;
+      }
+
+      .app-footer {
+        flex-direction: column;
+        align-items: flex-start;
+        padding: 0 10px 16px;
+      }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      *,
+      *::before,
+      *::after {
+        scroll-behavior: auto !important;
+        transition-duration: 0.01ms !important;
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">
+        <span class="brand-mark" aria-hidden="true">A</span>
+        <div>
+          <h1>英语零基础乐园</h1>
+          <p>从最常用的小词开始，一步一步建立语感</p>
+        </div>
+      </div>
+      <div class="header-stats" aria-label="学习概览">
+        <div class="stat-chip">
+          <span>已学单词</span>
+          <strong id="learned-count">0</strong>
+          <small> / 32</small>
+        </div>
+        <div class="stat-chip">
+          <span>答题正确率</span>
+          <strong id="accuracy">—</strong>
+        </div>
+      </div>
+    </header>
+
+    <nav class="main-tabs" aria-label="学习功能导航">
+      <button class="tab-button" type="button" data-view="flashcards" aria-selected="true">
+        <span>单词闪卡</span>
+      </button>
+      <button class="tab-button" type="button" data-view="quiz" aria-selected="false">
+        <span>选择题</span>
+      </button>
+      <button class="tab-button" type="button" data-view="be-practice" aria-selected="false">
+        <span>be 动词练习</span>
+      </button>
+      <button class="tab-button" type="button" data-view="spelling" aria-selected="false">
+        <span>拼写句子</span>
+      </button>
+      <button class="tab-button" type="button" data-view="progress" aria-selected="false">
+        <span>学习进度</span>
+      </button>
+    </nav>
+
+    <main>
+      <section id="view-flashcards" class="view is-active" aria-label="单词闪卡">
+        <div class="section-heading">
+          <div>
+            <h2>单词闪卡</h2>
+            <p>先看英文想一想，再点击卡片查看中文意思和例句。</p>
+          </div>
+          <span class="section-badge">翻一翻，记一记</span>
+        </div>
+
+        <div class="theme-filters" role="tablist" aria-label="选择单词主题">
+          <button class="theme-filter is-active" type="button" data-theme="all">全部</button>
+          <button class="theme-filter" type="button" data-theme="people">人</button>
+          <button class="theme-filter" type="button" data-theme="objects">物</button>
+          <button class="theme-filter" type="button" data-theme="actions">动作</button>
+          <button class="theme-filter" type="button" data-theme="daily">日常</button>
+        </div>
+
+        <div class="card-stage">
+          <div class="card-controls">
+            <button class="small-button" id="previous-card" type="button">上一张</button>
+            <span class="card-counter" id="card-counter">1 / 32</span>
+            <button class="small-button" id="next-card" type="button">下一张</button>
+          </div>
+          <div class="flashcard-shell">
+            <div class="flashcard" id="flashcard" tabindex="0" aria-label="单词闪卡，点击翻面">
+              <div class="flashcard-face flashcard-front">
+                <span class="card-theme" id="card-theme">全部</span>
+                <div class="card-word" id="card-word">student</div>
+                <div class="card-word-sub" id="card-word-sub">名词</div>
+                <div class="card-hint">点击卡片看中文</div>
+                <div class="card-actions">
+                  <button class="icon-button" id="speak-front" type="button" title="朗读这个单词" aria-label="朗读这个单词"><span class="speaker-icon" aria-hidden="true"></span> 朗读</button>
+                </div>
+              </div>
+              <div class="flashcard-face flashcard-back">
+                <div class="card-meaning" id="card-meaning">学生</div>
+                <div class="card-example" id="card-example">I am a student.</div>
+                <div class="card-example-cn" id="card-example-cn">我是一名学生。</div>
+                <div class="card-actions">
+                  <button class="icon-button" id="speak-back" type="button" title="朗读例句" aria-label="朗读例句"><span class="speaker-icon" aria-hidden="true"></span> 朗读例句</button>
+                  <button class="learned-button" id="mark-learned" type="button">标记已学会</button>
+                </div>
+              </div>
+            </div>
+          </div>
+          <p class="card-help">点击卡片可以翻面；看完后可以用“标记已学会”保存进度。</p>
+        </div>
+      </section>
+
+      <section id="view-quiz" class="view" aria-label="选择题">
+        <div class="section-heading">
+          <div>
+            <h2>选择题</h2>
+            <p>选择正确的单词，点击后会立刻告诉你答案和中文解释。</p>
+          </div>
+          <span class="section-badge">小步练习</span>
+        </div>
+
+        <div id="quiz-body" class="quiz-shell">
+          <div class="question-card">
+            <div class="quiz-progress">
+              <span>第 <strong id="quiz-number">1</strong> / 15 题</span>
+              <div class="progress-track" aria-hidden="true">
+                <div class="progress-fill" id="quiz-progress-fill"></div>
+              </div>
+            </div>
+            <p class="question-label" id="quiz-label">选择正确的单词</p>
+            <p class="question-sentence">
+              <span id="quiz-before">I </span><mark aria-label="空格">___</mark><span id="quiz-after"> a student.</span>
+            </p>
+            <div class="option-list" id="quiz-options"></div>
+            <div class="feedback" id="quiz-feedback" role="status" aria-live="polite">
+              <strong id="quiz-feedback-title"></strong>
+              <p id="quiz-feedback-text"></p>
+            </div>
+            <div class="next-row">
+              <button class="primary-button" id="next-quiz" type="button" disabled>下一题</button>
+            </div>
+          </div>
+          <aside class="side-card">
+            <h3>小提示</h3>
+            <p>不要着急。先看空格前后的单词，再想一想哪个选项最适合。</p>
+          </aside>
+        </div>
+
+        <div id="quiz-complete" class="complete-panel" hidden>
+          <div class="complete-mark">✓</div>
+          <h3>选择题练习完成</h3>
+          <p>你已经把这一组题目做完了，休息一下再继续。</p>
+          <p class="complete-score" id="quiz-complete-score"></p>
+          <button class="primary-button" id="restart-quiz" type="button">再练一次</button>
+        </div>
+      </section>
+
+      <section id="view-be-practice" class="view" aria-label="be 动词练习">
+        <div class="section-heading">
+          <div>
+            <h2>be 动词专项练习</h2>
+            <p>专门练习 am、is、are，跟着口诀先把最常用的小动词记住。</p>
+          </div>
+          <span class="section-badge">重点语法</span>
+        </div>
+
+        <div id="be-body" class="be-shell">
+          <div class="question-card">
+            <div class="quiz-progress">
+              <span>第 <strong id="be-number">1</strong> / 8 题</span>
+              <div class="progress-track" aria-hidden="true">
+                <div class="progress-fill" id="be-progress-fill"></div>
+              </div>
+            </div>
+            <div class="rule-card" style="margin-top: 22px;">
+              <h3>记住这句口诀</h3>
+              <p><strong>I 用 am，单数用 is，复数用 are。</strong>你（you）有一点特别，无论单数复数都用 are。</p>
+            </div>
+            <p class="question-label" id="be-label">选择正确的 be 动词</p>
+            <p class="question-sentence">
+              <span id="be-before">I </span><mark aria-label="空格">___</mark><span id="be-after"> a student.</span>
+            </p>
+            <div class="be-options" id="be-options"></div>
+            <div class="feedback" id="be-feedback" role="status" aria-live="polite">
+              <strong id="be-feedback-title"></strong>
+              <p id="be-feedback-text"></p>
+            </div>
+            <div class="next-row">
+              <button class="primary-button" id="next-be" type="button" disabled>下一题</button>
+            </div>
+          </div>
+          <aside class="side-card">
+            <h3>先看主语</h3>
+            <p>I 后面用 am；he、she、it 等单数主语用 is；they、we 等复数主语用 are。</p>
+          </aside>
+        </div>
+
+        <div id="be-complete" class="complete-panel" hidden>
+          <div class="complete-mark">★</div>
+          <h3>be 动词练习完成</h3>
+          <p>你已经完成一次 am、is、are 专项练习。</p>
+          <p class="complete-score" id="be-complete-score"></p>
+          <button class="primary-button" id="restart-be" type="button">再练一次</button>
+        </div>
+      </section>
+
+      <section id="view-spelling" class="view" aria-label="拼写句子">
+        <div class="section-heading">
+          <div>
+            <h2>拼写句子</h2>
+            <p>看中文把英文句子打出来，检查时会忽略大小写、空格差异和句尾标点，单词拼写要正确。</p>
+          </div>
+          <span class="section-badge">从词到句</span>
+        </div>
+
+        <div id="spelling-body" class="spelling-shell">
+          <div class="question-card">
+            <div class="quiz-progress">
+              <span>第 <strong id="spelling-number">1</strong> / 18 句</span>
+              <div class="progress-track" aria-hidden="true">
+                <div class="progress-fill" id="spelling-progress-fill"></div>
+              </div>
+            </div>
+            <p class="question-label">请把下面的中文写成英文</p>
+            <p class="question-sentence spelling-sentence" id="spelling-sentence">我是学生</p>
+            <form class="spelling-form" id="spelling-form">
+              <label class="spelling-label" for="spelling-answer">英文句子</label>
+              <textarea
+                class="spelling-input"
+                id="spelling-answer"
+                rows="2"
+                autocomplete="off"
+                autocorrect="off"
+                autocapitalize="off"
+                spellcheck="false"
+                enterkeyhint="send"
+                placeholder="在这里输入英文句子"
+              ></textarea>
+              <div class="spelling-actions">
+                <button class="primary-button" id="submit-spelling" type="submit">检查句子</button>
+                <button class="icon-button" id="speak-spelling" type="button" disabled title="朗读正确答案" aria-label="朗读正确答案">
+                  <span class="speaker-icon" aria-hidden="true"></span> 朗读正确答案
+                </button>
+              </div>
+            </form>
+            <div class="feedback" id="spelling-feedback" role="status" aria-live="polite">
+              <strong id="spelling-feedback-title"></strong>
+              <p id="spelling-feedback-text"></p>
+            </div>
+            <div class="next-row">
+              <button class="primary-button" id="next-spelling" type="button" disabled>下一句</button>
+            </div>
+          </div>
+          <aside class="side-card">
+            <h3>先想再写</h3>
+            <p>按照中文意思写出完整英文，重点检查 am、is、are 和名词是否拼写正确。</p>
+          </aside>
+        </div>
+
+        <div id="spelling-complete" class="complete-panel" hidden>
+          <div class="complete-mark">✓</div>
+          <h3>拼写句子练习完成</h3>
+          <p>你已经把这组英文句子都练完了。</p>
+          <p class="complete-score" id="spelling-complete-score"></p>
+          <button class="primary-button" id="restart-spelling" type="button">再练一次</button>
+        </div>
+      </section>
+
+      <section id="view-progress" class="view" aria-label="学习进度">
+        <div class="section-heading">
+          <div>
+            <h2>学习进度</h2>
+            <p>你的学习记录会保存在这台设备上，刷新或重新打开浏览器后仍然存在。</p>
+          </div>
+          <span class="section-badge">继续加油</span>
+        </div>
+
+        <div class="progress-grid">
+          <div class="metric-card">
+            <span>已学单词</span>
+            <strong id="progress-learned">0 / 32</strong>
+          </div>
+          <div class="metric-card">
+            <span>总正确率</span>
+            <strong id="progress-accuracy">—</strong>
+          </div>
+          <div class="metric-card">
+            <span>选择题正确率</span>
+            <strong id="progress-quiz-accuracy">—</strong>
+          </div>
+          <div class="metric-card">
+            <span>be 动词正确率</span>
+            <strong id="progress-be-accuracy">—</strong>
+          </div>
+          <div class="metric-card">
+            <span>选择题已答</span>
+            <strong id="progress-quiz-done">0 / 15</strong>
+          </div>
+          <div class="metric-card">
+            <span>be 练习已答</span>
+            <strong id="progress-be-done">0 / 8</strong>
+          </div>
+          <div class="metric-card">
+            <span>拼写句子正确率</span>
+            <strong id="progress-spelling-accuracy">—</strong>
+          </div>
+          <div class="metric-card">
+            <span>拼写句子已答</span>
+            <strong id="progress-spelling-done">0 / 18</strong>
+          </div>
+        </div>
+
+        <div class="progress-detail">
+          <h3>各主题单词掌握情况</h3>
+          <div class="theme-progress-list" id="theme-progress-list"></div>
+          <div class="storage-hint" id="storage-hint">学习记录已保存在本机浏览器中。</div>
+          <button class="reset-button" id="reset-progress" type="button">清空学习记录</button>
+        </div>
+      </section>
+    </main>
+
+    <footer class="app-footer">
+      <span><span class="status-dot" aria-hidden="true"></span>打开即用，无需联网</span>
+      <span>英语零基础乐园</span>
+    </footer>
+  </div>
+
+  <div class="toast" id="toast" role="status" aria-live="polite"></div>
+
+  <script>
+    'use strict';
+
+    // 单词内容按主题分组，例句尽量使用基础单词，方便零基础学习者理解。
+    const WORDS = [
+      {
+        id: 'student',
+        theme: 'people',
+        word: 'student',
+        cn: '学生',
+        type: '名词',
+        example: 'I am a student.',
+        exampleCn: '我是一名学生。'
+      },
+      {
+        id: 'teacher',
+        theme: 'people',
+        word: 'teacher',
+        cn: '老师',
+        type: '名词',
+        example: 'She is a teacher.',
+        exampleCn: '她是一名老师。'
+      },
+      {
+        id: 'friend',
+        theme: 'people',
+        word: 'friend',
+        cn: '朋友',
+        type: '名词',
+        example: 'He is my friend.',
+        exampleCn: '他是我的朋友。'
+      },
+      {
+        id: 'boy',
+        theme: 'people',
+        word: 'boy',
+        cn: '男孩',
+        type: '名词',
+        example: 'The boy is happy.',
+        exampleCn: '这个男孩很开心。'
+      },
+      {
+        id: 'girl',
+        theme: 'people',
+        word: 'girl',
+        cn: '女孩',
+        type: '名词',
+        example: 'She is a girl.',
+        exampleCn: '她是一个女孩。'
+      },
+      {
+        id: 'mother',
+        theme: 'people',
+        word: 'mother',
+        cn: '妈妈',
+        type: '名词',
+        example: 'My mother is at home.',
+        exampleCn: '我的妈妈在家。'
+      },
+      {
+        id: 'father',
+        theme: 'people',
+        word: 'father',
+        cn: '爸爸',
+        type: '名词',
+        example: 'My father is at home.',
+        exampleCn: '我的爸爸在家。'
+      },
+      {
+        id: 'baby',
+        theme: 'people',
+        word: 'baby',
+        cn: '婴儿',
+        type: '名词',
+        example: 'The baby is small.',
+        exampleCn: '这个婴儿很小。'
+      },
+      {
+        id: 'book',
+        theme: 'objects',
+        word: 'book',
+        cn: '书',
+        type: '名词',
+        example: 'This is a book.',
+        exampleCn: '这是一本书。'
+      },
+      {
+        id: 'computer',
+        theme: 'objects',
+        word: 'computer',
+        cn: '电脑',
+        type: '名词',
+        example: 'The computer is new.',
+        exampleCn: '这台电脑是新的。'
+      },
+      {
+        id: 'phone',
+        theme: 'objects',
+        word: 'phone',
+        cn: '电话',
+        type: '名词',
+        example: 'This is a phone.',
+        exampleCn: '这是一部电话。'
+      },
+      {
+        id: 'car',
+        theme: 'objects',
+        word: 'car',
+        cn: '汽车',
+        type: '名词',
+        example: 'The car is blue.',
+        exampleCn: '这辆汽车是蓝色的。'
+      },
+      {
+        id: 'apple',
+        theme: 'objects',
+        word: 'apple',
+        cn: '苹果',
+        type: '名词',
+        example: 'This is an apple.',
+        exampleCn: '这是一个苹果。'
+      },
+      {
+        id: 'dog',
+        theme: 'objects',
+        word: 'dog',
+        cn: '狗',
+        type: '名词',
+        example: 'The dog is small.',
+        exampleCn: '这只狗很小。'
+      },
+      {
+        id: 'cat',
+        theme: 'objects',
+        word: 'cat',
+        cn: '猫',
+        type: '名词',
+        example: 'The cat is here.',
+        exampleCn: '这只猫在这里。'
+      },
+      {
+        id: 'bag',
+        theme: 'objects',
+        word: 'bag',
+        cn: '包',
+        type: '名词',
+        example: 'This is my bag.',
+        exampleCn: '这是我的包。'
+      },
+      {
+        id: 'run',
+        theme: 'actions',
+        word: 'run',
+        cn: '跑',
+        type: '动词',
+        example: 'I can run.',
+        exampleCn: '我会跑。'
+      },
+      {
+        id: 'read',
+        theme: 'actions',
+        word: 'read',
+        cn: '读；看',
+        type: '动词',
+        example: 'I read a book.',
+        exampleCn: '我读一本书。'
+      },
+      {
+        id: 'write',
+        theme: 'actions',
+        word: 'write',
+        cn: '写',
+        type: '动词',
+        example: 'I write with a pen.',
+        exampleCn: '我用钢笔写字。'
+      },
+      {
+        id: 'eat',
+        theme: 'actions',
+        word: 'eat',
+        cn: '吃',
+        type: '动词',
+        example: 'I eat an apple.',
+        exampleCn: '我吃一个苹果。'
+      },
+      {
+        id: 'drink',
+        theme: 'actions',
+        word: 'drink',
+        cn: '喝',
+        type: '动词',
+        example: 'I drink water.',
+        exampleCn: '我喝水。'
+      },
+      {
+        id: 'play',
+        theme: 'actions',
+        word: 'play',
+        cn: '玩',
+        type: '动词',
+        example: 'We play at school.',
+        exampleCn: '我们在学校玩。'
+      },
+      {
+        id: 'see',
+        theme: 'actions',
+        word: 'see',
+        cn: '看见',
+        type: '动词',
+        example: 'I see a cat.',
+        exampleCn: '我看见一只猫。'
+      },
+      {
+        id: 'help',
+        theme: 'actions',
+        word: 'help',
+        cn: '帮助',
+        type: '动词',
+        example: 'I help my friend.',
+        exampleCn: '我帮助我的朋友。'
+      },
+      {
+        id: 'morning',
+        theme: 'daily',
+        word: 'morning',
+        cn: '早上',
+        type: '名词',
+        example: 'This is a good morning.',
+        exampleCn: '这是一个美好的早上。'
+      },
+      {
+        id: 'night',
+        theme: 'daily',
+        word: 'night',
+        cn: '晚上',
+        type: '名词',
+        example: 'The night is quiet.',
+        exampleCn: '这个晚上很安静。'
+      },
+      {
+        id: 'home',
+        theme: 'daily',
+        word: 'home',
+        cn: '家',
+        type: '名词',
+        example: 'I am at home.',
+        exampleCn: '我在家。'
+      },
+      {
+        id: 'school',
+        theme: 'daily',
+        word: 'school',
+        cn: '学校',
+        type: '名词',
+        example: 'We are at school.',
+        exampleCn: '我们在学校。'
+      },
+      {
+        id: 'water',
+        theme: 'daily',
+        word: 'water',
+        cn: '水',
+        type: '名词',
+        example: 'I drink water.',
+        exampleCn: '我喝水。'
+      },
+      {
+        id: 'food',
+        theme: 'daily',
+        word: 'food',
+        cn: '食物',
+        type: '名词',
+        example: 'The food is good.',
+        exampleCn: '这个食物很好。'
+      },
+      {
+        id: 'name',
+        theme: 'daily',
+        word: 'name',
+        cn: '名字',
+        type: '名词',
+        example: 'My name is Lin.',
+        exampleCn: '我的名字是林。'
+      },
+      {
+        id: 'day',
+        theme: 'daily',
+        word: 'day',
+        cn: '一天；日子',
+        type: '名词',
+        example: 'It is a good day.',
+        exampleCn: '这是一个好日子。'
+      }
+    ];
+
+    const QUIZ_QUESTIONS = [
+      {
+        before: 'I ',
+        after: ' a student.',
+        options: ['am', 'is', 'are'],
+        answer: 'am',
+        explanation: '主语 I 后面固定使用 am。'
+      },
+      {
+        before: 'She ',
+        after: ' my teacher.',
+        options: ['am', 'is', 'are'],
+        answer: 'is',
+        explanation: 'she 是单数主语，所以使用 is。'
+      },
+      {
+        before: 'They ',
+        after: ' my friends.',
+        options: ['am', 'is', 'are'],
+        answer: 'are',
+        explanation: 'they 是复数主语，所以使用 are。'
+      },
+      {
+        before: 'This is a ',
+        after: '.',
+        options: ['book', 'run', 'happy'],
+        answer: 'book',
+        explanation: '这句话的意思是“这是一本书”，book 是最合适的名词。'
+      },
+      {
+        before: 'He ',
+        after: ' my friend.',
+        options: ['am', 'is', 'are'],
+        answer: 'is',
+        explanation: 'he 是单数主语，所以使用 is。'
+      },
+      {
+        before: 'I ',
+        after: ' a girl.',
+        options: ['am', 'is', 'are'],
+        answer: 'am',
+        explanation: '主语 I 后面固定使用 am。'
+      },
+      {
+        before: 'You ',
+        after: ' a student.',
+        options: ['am', 'is', 'are'],
+        answer: 'are',
+        explanation: 'you 后面的 be 动词总是使用 are。'
+      },
+      {
+        before: 'We ',
+        after: ' at school.',
+        options: ['am', 'is', 'are'],
+        answer: 'are',
+        explanation: 'we 表示“我们”，是复数主语，所以使用 are。'
+      },
+      {
+        before: 'It ',
+        after: ' an apple.',
+        options: ['am', 'is', 'are'],
+        answer: 'is',
+        explanation: 'it 是单数主语，所以使用 is。'
+      },
+      {
+        before: 'The dog ',
+        after: ' small.',
+        options: ['am', 'is', 'are'],
+        answer: 'is',
+        explanation: 'the dog 指一只狗，是单数主语，所以使用 is。'
+      },
+      {
+        before: 'Tom and I ',
+        after: ' friends.',
+        options: ['am', 'is', 'are'],
+        answer: 'are',
+        explanation: 'Tom and I 表示两个人，是复数主语，所以使用 are。'
+      },
+      {
+        before: 'The cats ',
+        after: ' small.',
+        options: ['am', 'is', 'are'],
+        answer: 'are',
+        explanation: 'the cats 表示多只猫，是复数主语，所以使用 are。'
+      },
+      {
+        before: 'This ',
+        after: ' a phone.',
+        options: ['am', 'is', 'are'],
+        answer: 'is',
+        explanation: 'this 指单数的“这个”，所以使用 is。'
+      },
+      {
+        before: 'I see a ',
+        after: '.',
+        options: ['cat', 'read', 'are'],
+        answer: 'cat',
+        explanation: '这句话的意思是“我看见一只猫”，cat 是最合适的名词。'
+      },
+      {
+        before: 'We ',
+        after: ' students.',
+        options: ['am', 'is', 'are'],
+        answer: 'are',
+        explanation: 'we 是复数主语，所以使用 are。'
+      }
+    ];
+
+    const BE_QUESTIONS = [
+      {
+        before: 'I ',
+        after: ' a student.',
+        answer: 'am',
+        explanation: 'I 后面固定使用 am。'
+      },
+      {
+        before: 'She ',
+        after: ' my teacher.',
+        answer: 'is',
+        explanation: 'she 是单数主语，所以使用 is。'
+      },
+      {
+        before: 'They ',
+        after: ' friends.',
+        answer: 'are',
+        explanation: 'they 是复数主语，所以使用 are。'
+      },
+      {
+        before: 'This ',
+        after: ' an apple.',
+        answer: 'is',
+        explanation: 'this 是单数主语，所以使用 is。'
+      },
+      {
+        before: 'We ',
+        after: ' at school.',
+        answer: 'are',
+        explanation: 'we 是复数主语，所以使用 are。'
+      },
+      {
+        before: 'He ',
+        after: ' my father.',
+        answer: 'is',
+        explanation: 'he 是单数主语，所以使用 is。'
+      },
+      {
+        before: 'It ',
+        after: ' a cat.',
+        answer: 'is',
+        explanation: 'it 是单数主语，所以使用 is。'
+      },
+      {
+        before: 'You ',
+        after: ' a good friend.',
+        answer: 'are',
+        explanation: 'you 后面的 be 动词总是使用 are。'
+      }
+    ];
+
+    const SPELLING_SENTENCES = [
+      { cn: '我是学生', answer: 'I am a student.' },
+      { cn: '这是我的书', answer: 'This is my book.' },
+      { cn: '他是我的朋友', answer: 'He is my friend.' },
+      { cn: '她是老师', answer: 'She is a teacher.' },
+      { cn: '他们是学生', answer: 'They are students.' },
+      { cn: '这是我的电脑', answer: 'This is my computer.' },
+      { cn: '你是我的好朋友', answer: 'You are my good friend.' },
+      { cn: '我们在学校', answer: 'We are at school.' },
+      { cn: '它是一只猫', answer: 'It is a cat.' },
+      { cn: '这是苹果', answer: 'This is an apple.' },
+      { cn: '我的名字是林', answer: 'My name is Lin.' },
+      { cn: '他是我爸爸', answer: 'He is my father.' },
+      { cn: '她是我妈妈', answer: 'She is my mother.' },
+      { cn: '我是一名女孩', answer: 'I am a girl.' },
+      { cn: '你是一名男孩', answer: 'You are a boy.' },
+      { cn: '这些是我的书', answer: 'These are my books.' },
+      { cn: '我们很高兴', answer: 'We are happy.' },
+      { cn: '我的爸爸和妈妈是老师', answer: 'My father and mother are teachers.' }
+    ];
+
+    const THEME_NAMES = {
+      all: '全部',
+      people: '人',
+      objects: '物',
+      actions: '动作',
+      daily: '日常'
+    };
+
+    const ENCOURAGEMENTS = ['太棒了！', '答对了！', '很好，继续保持！', '真不错！', '做得真好！'];
+    const STORAGE_KEY = 'zeroEnglishProgress.v1';
+
+    const state = {
+      view: 'flashcards',
+      theme: 'all',
+      cardIndex: 0,
+      learned: new Set(),
+      quizIndex: 0,
+      quizSelected: null,
+      quizAttempted: 0,
+      quizCorrect: 0,
+      beIndex: 0,
+      beSelected: null,
+      beAttempted: 0,
+      beCorrect: 0,
+      spellingIndex: 0,
+      spellingAnswered: false,
+      spellingAttempted: 0,
+      spellingCorrect: 0
+    };
+
+    const ui = {
+      views: document.querySelectorAll('.view'),
+      tabButtons: document.querySelectorAll('[data-view]'),
+      learnedCount: document.getElementById('learned-count'),
+      accuracy: document.getElementById('accuracy'),
+      themeFilters: document.querySelectorAll('[data-theme]'),
+      cardCounter: document.getElementById('card-counter'),
+      flashcard: document.getElementById('flashcard'),
+      cardTheme: document.getElementById('card-theme'),
+      cardWord: document.getElementById('card-word'),
+      cardWordSub: document.getElementById('card-word-sub'),
+      cardMeaning: document.getElementById('card-meaning'),
+      cardExample: document.getElementById('card-example'),
+      cardExampleCn: document.getElementById('card-example-cn'),
+      speakFront: document.getElementById('speak-front'),
+      speakBack: document.getElementById('speak-back'),
+      markLearned: document.getElementById('mark-learned'),
+      previousCard: document.getElementById('previous-card'),
+      nextCard: document.getElementById('next-card'),
+      quizBody: document.getElementById('quiz-body'),
+      quizComplete: document.getElementById('quiz-complete'),
+      quizNumber: document.getElementById('quiz-number'),
+      quizProgressFill: document.getElementById('quiz-progress-fill'),
+      quizLabel: document.getElementById('quiz-label'),
+      quizBefore: document.getElementById('quiz-before'),
+      quizAfter: document.getElementById('quiz-after'),
+      quizOptions: document.getElementById('quiz-options'),
+      quizFeedback: document.getElementById('quiz-feedback'),
+      quizFeedbackTitle: document.getElementById('quiz-feedback-title'),
+      quizFeedbackText: document.getElementById('quiz-feedback-text'),
+      nextQuiz: document.getElementById('next-quiz'),
+      quizCompleteScore: document.getElementById('quiz-complete-score'),
+      restartQuiz: document.getElementById('restart-quiz'),
+      beBody: document.getElementById('be-body'),
+      beComplete: document.getElementById('be-complete'),
+      beNumber: document.getElementById('be-number'),
+      beProgressFill: document.getElementById('be-progress-fill'),
+      beLabel: document.getElementById('be-label'),
+      beBefore: document.getElementById('be-before'),
+      beAfter: document.getElementById('be-after'),
+      beOptions: document.getElementById('be-options'),
+      beFeedback: document.getElementById('be-feedback'),
+      beFeedbackTitle: document.getElementById('be-feedback-title'),
+      beFeedbackText: document.getElementById('be-feedback-text'),
+      nextBe: document.getElementById('next-be'),
+      beCompleteScore: document.getElementById('be-complete-score'),
+      restartBe: document.getElementById('restart-be'),
+      spellingBody: document.getElementById('spelling-body'),
+      spellingComplete: document.getElementById('spelling-complete'),
+      spellingNumber: document.getElementById('spelling-number'),
+      spellingProgressFill: document.getElementById('spelling-progress-fill'),
+      spellingSentence: document.getElementById('spelling-sentence'),
+      spellingForm: document.getElementById('spelling-form'),
+      spellingAnswer: document.getElementById('spelling-answer'),
+      submitSpelling: document.getElementById('submit-spelling'),
+      speakSpelling: document.getElementById('speak-spelling'),
+      spellingFeedback: document.getElementById('spelling-feedback'),
+      spellingFeedbackTitle: document.getElementById('spelling-feedback-title'),
+      spellingFeedbackText: document.getElementById('spelling-feedback-text'),
+      nextSpelling: document.getElementById('next-spelling'),
+      spellingCompleteScore: document.getElementById('spelling-complete-score'),
+      restartSpelling: document.getElementById('restart-spelling'),
+      progressLearned: document.getElementById('progress-learned'),
+      progressAccuracy: document.getElementById('progress-accuracy'),
+      progressQuizAccuracy: document.getElementById('progress-quiz-accuracy'),
+      progressBeAccuracy: document.getElementById('progress-be-accuracy'),
+      progressSpellingAccuracy: document.getElementById('progress-spelling-accuracy'),
+      progressQuizDone: document.getElementById('progress-quiz-done'),
+      progressBeDone: document.getElementById('progress-be-done'),
+      progressSpellingDone: document.getElementById('progress-spelling-done'),
+      themeProgressList: document.getElementById('theme-progress-list'),
+      storageHint: document.getElementById('storage-hint'),
+      resetProgress: document.getElementById('reset-progress'),
+      toast: document.getElementById('toast')
+    };
+
+    let toastTimer = null;
+
+    function getFilteredWords() {
+      if (state.theme === 'all') {
+        return WORDS;
+      }
+      return WORDS.filter((word) => word.theme === state.theme);
+    }
+
+    function getCurrentWord() {
+      const words = getFilteredWords();
+      return words[Math.min(state.cardIndex, words.length - 1)];
+    }
+
+    function saveProgress() {
+      const data = {
+        learned: [...state.learned],
+        quizAttempted: state.quizAttempted,
+        quizCorrect: state.quizCorrect,
+        beAttempted: state.beAttempted,
+        beCorrect: state.beCorrect,
+        spellingAttempted: state.spellingAttempted,
+        spellingCorrect: state.spellingCorrect
+      };
+
+      try {
+        localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+        ui.storageHint.textContent = '学习记录已保存在本机浏览器中。';
+      } catch (error) {
+        ui.storageHint.textContent = '当前浏览器暂时不能保存学习记录，关闭页面后进度可能丢失。';
+      }
+    }
+
+    function loadProgress() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (!raw) {
+          return;
+        }
+
+        const saved = JSON.parse(raw);
+        const learned = Array.isArray(saved.learned) ? saved.learned : [];
+        state.learned = new Set(learned.filter((id) => WORDS.some((word) => word.id === id)));
+        state.quizAttempted = Number.isFinite(saved.quizAttempted) ? Math.max(0, saved.quizAttempted) : 0;
+        state.quizCorrect = Number.isFinite(saved.quizCorrect) ? Math.max(0, saved.quizCorrect) : 0;
+        state.beAttempted = Number.isFinite(saved.beAttempted) ? Math.max(0, saved.beAttempted) : 0;
+        state.beCorrect = Number.isFinite(saved.beCorrect) ? Math.max(0, saved.beCorrect) : 0;
+        state.spellingAttempted = Number.isFinite(saved.spellingAttempted) ? Math.max(0, saved.spellingAttempted) : 0;
+        state.spellingCorrect = Number.isFinite(saved.spellingCorrect) ? Math.max(0, saved.spellingCorrect) : 0;
+      } catch (error) {
+        // 本地记录损坏时忽略旧数据，保证应用仍然可以正常打开。
+        state.learned = new Set();
+      }
+    }
+
+    function getTotalAttempted() {
+      return state.quizAttempted + state.beAttempted + state.spellingAttempted;
+    }
+
+    function getTotalCorrect() {
+      return state.quizCorrect + state.beCorrect + state.spellingCorrect;
+    }
+
+    function getAccuracy(correct, attempted) {
+      if (!attempted) {
+        return '—';
+      }
+      return `${Math.round((correct / attempted) * 100)}%`;
+    }
+
+    function updateHeaderStats() {
+      ui.learnedCount.textContent = state.learned.size;
+      ui.accuracy.textContent = getAccuracy(getTotalCorrect(), getTotalAttempted());
+    }
+
+    function renderFlashcard() {
+      const words = getFilteredWords();
+      const word = words[Math.min(state.cardIndex, words.length - 1)];
+      const learned = state.learned.has(word.id);
+
+      ui.cardCounter.textContent = `${Math.min(state.cardIndex, words.length - 1) + 1} / ${words.length}`;
+      ui.cardTheme.textContent = THEME_NAMES[word.theme];
+      ui.cardWord.textContent = word.word;
+      ui.cardWordSub.textContent = word.type;
+      ui.cardMeaning.textContent = word.cn;
+      ui.cardExample.textContent = word.example;
+      ui.cardExampleCn.textContent = word.exampleCn;
+      ui.flashcard.classList.remove('is-flipped');
+      ui.flashcard.setAttribute('aria-label', `单词闪卡：${word.word}`);
+      ui.speakFront.dataset.text = word.word;
+      ui.speakBack.dataset.text = word.example;
+      ui.markLearned.classList.toggle('is-learned', learned);
+      ui.markLearned.textContent = learned ? '✓ 已学会' : '标记已学会';
+    }
+
+    function renderThemeFilters() {
+      ui.themeFilters.forEach((button) => {
+        button.classList.toggle('is-active', button.dataset.theme === state.theme);
+      });
+    }
+
+    function toggleFlashcard() {
+      ui.flashcard.classList.toggle('is-flipped');
+    }
+
+    function moveCard(direction) {
+      const words = getFilteredWords();
+      if (!words.length) {
+        return;
+      }
+      state.cardIndex = (state.cardIndex + direction + words.length) % words.length;
+      renderFlashcard();
+    }
+
+    function toggleLearned() {
+      const word = getCurrentWord();
+      const wasFlipped = ui.flashcard.classList.contains('is-flipped');
+      if (state.learned.has(word.id)) {
+        state.learned.delete(word.id);
+        showToast('已取消这个单词的“已学会”标记。');
+      } else {
+        state.learned.add(word.id);
+        showToast('太棒了！这个单词已经记到学习进度里。');
+      }
+      saveProgress();
+      renderFlashcard();
+      if (wasFlipped) {
+        ui.flashcard.classList.add('is-flipped');
+      }
+      updateHeaderStats();
+    }
+
+    function speakText(text, button) {
+      if (!('speechSynthesis' in window) || !text) {
+        showToast('当前浏览器不支持网页朗读，可以尝试使用较新的浏览器。');
+        return;
+      }
+
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      utterance.lang = 'en-US';
+      utterance.rate = 0.78;
+      utterance.pitch = 1;
+
+      const voices = window.speechSynthesis.getVoices();
+      const englishVoice = voices.find((voice) => voice.lang.toLowerCase().startsWith('en'));
+      if (englishVoice) {
+        utterance.voice = englishVoice;
+      }
+
+      utterance.onstart = () => {
+        button && button.classList.add('speaking');
+      };
+      utterance.onend = () => {
+        button && button.classList.remove('speaking');
+      };
+      utterance.onerror = () => {
+        button && button.classList.remove('speaking');
+      };
+
+      window.speechSynthesis.speak(utterance);
+    }
+
+    function renderQuiz() {
+      const question = QUIZ_QUESTIONS[state.quizIndex];
+      const currentNumber = state.quizIndex + 1;
+      ui.quizBody.hidden = false;
+      ui.quizComplete.hidden = true;
+      ui.quizNumber.textContent = currentNumber;
+      ui.quizProgressFill.style.width = `${(state.quizIndex / QUIZ_QUESTIONS.length) * 100}%`;
+      ui.quizLabel.textContent = question.answer === 'am' || question.answer === 'is' || question.answer === 'are'
+        ? '选择正确的 be 动词'
+        : '选择正确的单词';
+      ui.quizBefore.textContent = question.before;
+      ui.quizAfter.textContent = question.after;
+      ui.quizOptions.innerHTML = '';
+      ui.quizFeedback.classList.remove('is-visible');
+      ui.quizFeedback.removeAttribute('data-result');
+      ui.nextQuiz.disabled = true;
+      ui.nextQuiz.textContent = state.quizIndex === QUIZ_QUESTIONS.length - 1 ? '查看结果' : '下一题';
+
+      question.options.forEach((option) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'option-button';
+        button.textContent = option;
+        button.addEventListener('click', () => answerQuiz(option));
+        ui.quizOptions.appendChild(button);
+      });
+    }
+
+    function answerQuiz(selected) {
+      if (state.quizSelected) {
+        return;
+      }
+
+      const question = QUIZ_QUESTIONS[state.quizIndex];
+      const isCorrect = selected === question.answer;
+      state.quizSelected = selected;
+      state.quizAttempted += 1;
+      if (isCorrect) {
+        state.quizCorrect += 1;
+      }
+
+      [...ui.quizOptions.children].forEach((button) => {
+        button.disabled = true;
+        if (button.textContent === question.answer) {
+          button.classList.add('is-correct');
+        }
+        if (button.textContent === selected && !isCorrect) {
+          button.classList.add('is-wrong');
+        }
+      });
+
+      if (isCorrect) {
+        ui.quizFeedbackTitle.textContent = ENCOURAGEMENTS[Math.floor(Math.random() * ENCOURAGEMENTS.length)];
+        ui.quizFeedbackText.textContent = `正确。${question.explanation}`;
+        ui.quizFeedback.dataset.result = 'correct';
+      } else {
+        ui.quizFeedbackTitle.textContent = '别灰心，再想一想！';
+        ui.quizFeedbackText.textContent = `正确答案是 ${question.answer}。${question.explanation}`;
+        ui.quizFeedback.dataset.result = 'wrong';
+      }
+      ui.quizFeedback.classList.add('is-visible');
+      ui.nextQuiz.disabled = false;
+      updateHeaderStats();
+      saveProgress();
+    }
+
+    function nextQuizQuestion() {
+      if (!state.quizSelected) {
+        return;
+      }
+
+      if (state.quizIndex < QUIZ_QUESTIONS.length - 1) {
+        state.quizIndex += 1;
+        state.quizSelected = null;
+        renderQuiz();
+        return;
+      }
+
+      ui.quizBody.hidden = true;
+      ui.quizComplete.hidden = false;
+      ui.quizProgressFill.style.width = '100%';
+      const score = `${state.quizCorrect} / ${state.quizAttempted}`;
+      ui.quizCompleteScore.textContent = `当前累计：${score}，正确率 ${getAccuracy(state.quizCorrect, state.quizAttempted)}`;
+    }
+
+    function restartQuiz() {
+      state.quizIndex = 0;
+      state.quizSelected = null;
+      renderQuiz();
+    }
+
+    function renderBePractice() {
+      const question = BE_QUESTIONS[state.beIndex];
+      const currentNumber = state.beIndex + 1;
+      ui.beBody.hidden = false;
+      ui.beComplete.hidden = true;
+      ui.beNumber.textContent = currentNumber;
+      ui.beProgressFill.style.width = `${(state.beIndex / BE_QUESTIONS.length) * 100}%`;
+      ui.beLabel.textContent = '选择正确的 be 动词';
+      ui.beBefore.textContent = question.before;
+      ui.beAfter.textContent = question.after;
+      ui.beOptions.innerHTML = '';
+      ui.beFeedback.classList.remove('is-visible');
+      ui.beFeedback.removeAttribute('data-result');
+      ui.nextBe.disabled = true;
+      ui.nextBe.textContent = state.beIndex === BE_QUESTIONS.length - 1 ? '查看结果' : '下一题';
+
+      ['am', 'is', 'are'].forEach((option) => {
+        const button = document.createElement('button');
+        button.type = 'button';
+        button.className = 'be-option';
+        button.textContent = option;
+        button.addEventListener('click', () => answerBe(option));
+        ui.beOptions.appendChild(button);
+      });
+    }
+
+    function answerBe(selected) {
+      if (state.beSelected) {
+        return;
+      }
+
+      const question = BE_QUESTIONS[state.beIndex];
+      const isCorrect = selected === question.answer;
+      state.beSelected = selected;
+      state.beAttempted += 1;
+      if (isCorrect) {
+        state.beCorrect += 1;
+      }
+
+      [...ui.beOptions.children].forEach((button) => {
+        button.disabled = true;
+        if (button.textContent === question.answer) {
+          button.classList.add('is-correct');
+        }
+        if (button.textContent === selected && !isCorrect) {
+          button.classList.add('is-wrong');
+        }
+      });
+
+      if (isCorrect) {
+        ui.beFeedbackTitle.textContent = ENCOURAGEMENTS[Math.floor(Math.random() * ENCOURAGEMENTS.length)];
+        ui.beFeedbackText.textContent = `正确。${question.explanation}`;
+        ui.beFeedback.dataset.result = 'correct';
+      } else {
+        ui.beFeedbackTitle.textContent = '没关系，看清楚主语再试一次。';
+        ui.beFeedbackText.textContent = `正确答案是 ${question.answer}。${question.explanation}`;
+        ui.beFeedback.dataset.result = 'wrong';
+      }
+      ui.beFeedback.classList.add('is-visible');
+      ui.nextBe.disabled = false;
+      updateHeaderStats();
+      saveProgress();
+    }
+
+    function nextBeQuestion() {
+      if (!state.beSelected) {
+        return;
+      }
+
+      if (state.beIndex < BE_QUESTIONS.length - 1) {
+        state.beIndex += 1;
+        state.beSelected = null;
+        renderBePractice();
+        return;
+      }
+
+      ui.beBody.hidden = true;
+      ui.beComplete.hidden = false;
+      ui.beProgressFill.style.width = '100%';
+      const score = `${state.beCorrect} / ${state.beAttempted}`;
+      ui.beCompleteScore.textContent = `当前累计：${score}，正确率 ${getAccuracy(state.beCorrect, state.beAttempted)}`;
+    }
+
+    function restartBePractice() {
+      state.beIndex = 0;
+      state.beSelected = null;
+      renderBePractice();
+    }
+
+    function normalizeSentenceInput(value) {
+      return String(value ?? '')
+        .normalize('NFKC')
+        .trim()
+        .replace(/\s+/g, ' ')
+        .replace(/[.!?。！？,，;；:：]+$/g, '')
+        .trim()
+        .toLowerCase();
+    }
+
+    function getSentenceWords(value) {
+      return normalizeSentenceInput(value).split(' ').filter(Boolean);
+    }
+
+    function isSpellingAnswerCorrect(userAnswer, correctAnswer) {
+      const normalizedUser = normalizeSentenceInput(userAnswer);
+      const normalizedCorrect = normalizeSentenceInput(correctAnswer);
+      if (!normalizedUser) {
+        return false;
+      }
+      return normalizedUser === normalizedCorrect
+        || normalizedUser.replace(/\s/g, '') === normalizedCorrect.replace(/\s/g, '');
+    }
+
+    function getWordDiff(userAnswer, correctAnswer) {
+      const userWords = getSentenceWords(userAnswer);
+      const correctWords = getSentenceWords(correctAnswer);
+      const lengths = Array.from(
+        { length: userWords.length + 1 },
+        () => Array(correctWords.length + 1).fill(0)
+      );
+
+      for (let userIndex = 1; userIndex <= userWords.length; userIndex += 1) {
+        for (let correctIndex = 1; correctIndex <= correctWords.length; correctIndex += 1) {
+          if (userWords[userIndex - 1] === correctWords[correctIndex - 1]) {
+            lengths[userIndex][correctIndex] = lengths[userIndex - 1][correctIndex - 1] + 1;
+          } else {
+            lengths[userIndex][correctIndex] = Math.max(
+              lengths[userIndex - 1][correctIndex],
+              lengths[userIndex][correctIndex - 1]
+            );
+          }
+        }
+      }
+
+      let userIndex = userWords.length;
+      let correctIndex = correctWords.length;
+      const extraWords = [];
+      const missingWords = [];
+
+      while (userIndex > 0 || correctIndex > 0) {
+        if (
+          userIndex > 0
+          && correctIndex > 0
+          && userWords[userIndex - 1] === correctWords[correctIndex - 1]
+        ) {
+          userIndex -= 1;
+          correctIndex -= 1;
+        } else if (
+          correctIndex > 0
+          && (
+            userIndex === 0
+            || lengths[userIndex][correctIndex - 1] >= lengths[userIndex - 1][correctIndex]
+          )
+        ) {
+          missingWords.unshift(correctWords[correctIndex - 1]);
+          correctIndex -= 1;
+        } else {
+          extraWords.unshift(userWords[userIndex - 1]);
+          userIndex -= 1;
+        }
+      }
+
+      return { extraWords, missingWords };
+    }
+
+    function describeWordDiff(userAnswer, correctAnswer) {
+      const { extraWords, missingWords } = getWordDiff(userAnswer, correctAnswer);
+      if (!extraWords.length && !missingWords.length) {
+        return '';
+      }
+
+      const details = [];
+      const pairedCount = Math.min(extraWords.length, missingWords.length);
+      for (let index = 0; index < pairedCount; index += 1) {
+        details.push(`${extraWords[index]}（应为 ${missingWords[index]}）`);
+      }
+      if (extraWords.length > pairedCount) {
+        details.push(`多写了 ${extraWords.slice(pairedCount).join('、')}`);
+      }
+      if (missingWords.length > pairedCount) {
+        details.push(`漏写了 ${missingWords.slice(pairedCount).join('、')}`);
+      }
+      return details.join('；');
+    }
+
+    function renderSpelling() {
+      const sentence = SPELLING_SENTENCES[state.spellingIndex];
+      const currentNumber = state.spellingIndex + 1;
+      ui.spellingBody.hidden = false;
+      ui.spellingComplete.hidden = true;
+      ui.spellingNumber.textContent = currentNumber;
+      ui.spellingProgressFill.style.width = `${(state.spellingIndex / SPELLING_SENTENCES.length) * 100}%`;
+      ui.spellingSentence.textContent = sentence.cn;
+      ui.spellingAnswer.value = '';
+      ui.spellingAnswer.disabled = false;
+      ui.submitSpelling.disabled = false;
+      ui.speakSpelling.dataset.text = sentence.answer;
+      ui.speakSpelling.disabled = true;
+      ui.speakSpelling.classList.remove('speaking');
+      ui.spellingFeedback.classList.remove('is-visible');
+      ui.spellingFeedback.removeAttribute('data-result');
+      ui.spellingFeedbackTitle.textContent = '';
+      ui.spellingFeedbackText.textContent = '';
+      ui.nextSpelling.disabled = true;
+      ui.nextSpelling.textContent = state.spellingIndex === SPELLING_SENTENCES.length - 1
+        ? '查看结果'
+        : '下一句';
+    }
+
+    function answerSpelling() {
+      if (state.spellingAnswered) {
+        return;
+      }
+
+      const sentence = SPELLING_SENTENCES[state.spellingIndex];
+      const userAnswer = ui.spellingAnswer.value;
+      const isCorrect = isSpellingAnswerCorrect(userAnswer, sentence.answer);
+      state.spellingAnswered = true;
+      state.spellingAttempted += 1;
+      if (isCorrect) {
+        state.spellingCorrect += 1;
+      }
+
+      ui.spellingAnswer.disabled = true;
+      ui.submitSpelling.disabled = true;
+      ui.speakSpelling.disabled = false;
+      ui.spellingFeedback.classList.add('is-visible');
+
+      if (isCorrect) {
+        ui.spellingFeedbackTitle.textContent = ENCOURAGEMENTS[Math.floor(Math.random() * ENCOURAGEMENTS.length)];
+        ui.spellingFeedbackText.textContent = '这句话拼写正确。';
+        ui.spellingFeedback.dataset.result = 'correct';
+      } else {
+        let detail = '单词拼写或顺序还需要再检查。';
+        if (!userAnswer.trim()) {
+          detail = '你还没有输入英文。';
+        } else {
+          const diff = describeWordDiff(userAnswer, sentence.answer);
+          if (diff) {
+            detail = `检查这些词：${diff}。`;
+          }
+        }
+        ui.spellingFeedbackTitle.textContent = '再检查一下拼写和单词顺序。';
+        ui.spellingFeedbackText.textContent = `正确答案：${sentence.answer}。${detail}`;
+        ui.spellingFeedback.dataset.result = 'wrong';
+      }
+
+      ui.nextSpelling.disabled = false;
+      updateHeaderStats();
+      saveProgress();
+    }
+
+    function nextSpellingSentence() {
+      if (!state.spellingAnswered) {
+        return;
+      }
+
+      if (state.spellingIndex < SPELLING_SENTENCES.length - 1) {
+        state.spellingIndex += 1;
+        state.spellingAnswered = false;
+        renderSpelling();
+        return;
+      }
+
+      ui.spellingBody.hidden = true;
+      ui.spellingComplete.hidden = false;
+      ui.spellingProgressFill.style.width = '100%';
+      const score = `${state.spellingCorrect} / ${state.spellingAttempted}`;
+      ui.spellingCompleteScore.textContent = `当前累计：${score}，正确率 ${getAccuracy(state.spellingCorrect, state.spellingAttempted)}`;
+    }
+
+    function restartSpelling() {
+      state.spellingIndex = 0;
+      state.spellingAnswered = false;
+      renderSpelling();
+    }
+
+    function renderProgress() {
+      const totalAttempted = getTotalAttempted();
+      const totalCorrect = getTotalCorrect();
+      ui.progressLearned.textContent = `${state.learned.size} / ${WORDS.length}`;
+      ui.progressAccuracy.textContent = getAccuracy(totalCorrect, totalAttempted);
+      ui.progressQuizAccuracy.textContent = getAccuracy(state.quizCorrect, state.quizAttempted);
+      ui.progressBeAccuracy.textContent = getAccuracy(state.beCorrect, state.beAttempted);
+      ui.progressSpellingAccuracy.textContent = getAccuracy(state.spellingCorrect, state.spellingAttempted);
+      ui.progressQuizDone.textContent = `${state.quizAttempted} / ${QUIZ_QUESTIONS.length}`;
+      ui.progressBeDone.textContent = `${state.beAttempted} / ${BE_QUESTIONS.length}`;
+      ui.progressSpellingDone.textContent = `${state.spellingAttempted} / ${SPELLING_SENTENCES.length}`;
+
+      const themes = [
+        { key: 'people', label: '人' },
+        { key: 'objects', label: '物' },
+        { key: 'actions', label: '动作' },
+        { key: 'daily', label: '日常' }
+      ];
+
+      ui.themeProgressList.innerHTML = '';
+      themes.forEach((theme) => {
+        const words = WORDS.filter((word) => word.theme === theme.key);
+        const learned = words.filter((word) => state.learned.has(word.id)).length;
+        const percent = words.length ? (learned / words.length) * 100 : 0;
+        const row = document.createElement('div');
+        row.className = 'theme-progress-row';
+        row.innerHTML = `
+          <span class="row-label">${theme.label}</span>
+          <div class="bar" aria-label="${theme.label}已学 ${learned} 个"><div class="bar-fill ${percent === 100 ? 'is-green' : ''}" style="width: ${percent}%"></div></div>
+          <span class="row-value">${learned}/${words.length}</span>
+        `;
+        ui.themeProgressList.appendChild(row);
+      });
+
+      saveProgress();
+    }
+
+    function switchView(viewName) {
+      state.view = viewName;
+      ui.views.forEach((view) => {
+        view.classList.toggle('is-active', view.id === `view-${viewName}`);
+      });
+      ui.tabButtons.forEach((button) => {
+        button.setAttribute('aria-selected', String(button.dataset.view === viewName));
+      });
+      if (viewName === 'progress') {
+        renderProgress();
+      }
+    }
+
+    function showToast(message) {
+      clearTimeout(toastTimer);
+      ui.toast.textContent = message;
+      ui.toast.classList.add('is-visible');
+      toastTimer = setTimeout(() => {
+        ui.toast.classList.remove('is-visible');
+      }, 2400);
+    }
+
+    function resetAllProgress() {
+      const confirmed = window.confirm('确定要清空所有学习记录吗？这个操作不能撤销。');
+      if (!confirmed) {
+        return;
+      }
+
+      state.learned = new Set();
+      state.quizAttempted = 0;
+      state.quizCorrect = 0;
+      state.beAttempted = 0;
+      state.beCorrect = 0;
+      state.spellingAttempted = 0;
+      state.spellingCorrect = 0;
+      try {
+        localStorage.removeItem(STORAGE_KEY);
+      } catch (error) {
+        // 清除失败时内存数据仍然会先清空，用户不会看到残留记录。
+      }
+      renderFlashcard();
+      renderProgress();
+      updateHeaderStats();
+      showToast('学习记录已清空。');
+    }
+
+    function bindEvents() {
+      ui.tabButtons.forEach((button) => {
+        button.addEventListener('click', () => switchView(button.dataset.view));
+      });
+
+      ui.themeFilters.forEach((button) => {
+        button.addEventListener('click', () => {
+          state.theme = button.dataset.theme;
+          state.cardIndex = 0;
+          renderThemeFilters();
+          renderFlashcard();
+        });
+      });
+
+      ui.previousCard.addEventListener('click', () => moveCard(-1));
+      ui.nextCard.addEventListener('click', () => moveCard(1));
+      ui.flashcard.addEventListener('click', (event) => {
+        if (!event.target.closest('button')) {
+          toggleFlashcard();
+        }
+      });
+      ui.flashcard.addEventListener('keydown', (event) => {
+        if ((event.key === 'Enter' || event.key === ' ') && !event.target.closest('button')) {
+          event.preventDefault();
+          toggleFlashcard();
+        }
+      });
+      ui.speakFront.addEventListener('click', () => speakText(ui.speakFront.dataset.text, ui.speakFront));
+      ui.speakBack.addEventListener('click', () => speakText(ui.speakBack.dataset.text, ui.speakBack));
+      ui.markLearned.addEventListener('click', toggleLearned);
+
+      ui.nextQuiz.addEventListener('click', nextQuizQuestion);
+      ui.restartQuiz.addEventListener('click', restartQuiz);
+      ui.nextBe.addEventListener('click', nextBeQuestion);
+      ui.restartBe.addEventListener('click', restartBePractice);
+      ui.spellingForm.addEventListener('submit', (event) => {
+        event.preventDefault();
+        answerSpelling();
+      });
+      ui.spellingAnswer.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter' && !event.shiftKey) {
+          event.preventDefault();
+          answerSpelling();
+        }
+      });
+      ui.speakSpelling.addEventListener('click', () => {
+        speakText(ui.speakSpelling.dataset.text, ui.speakSpelling);
+      });
+      ui.nextSpelling.addEventListener('click', nextSpellingSentence);
+      ui.restartSpelling.addEventListener('click', restartSpelling);
+      ui.resetProgress.addEventListener('click', resetAllProgress);
+    }
+
+    function initializeSpeech() {
+      if ('speechSynthesis' in window) {
+        window.speechSynthesis.getVoices();
+        window.speechSynthesis.addEventListener('voiceschanged', () => {
+          window.speechSynthesis.getVoices();
+        });
+      }
+    }
+
+    loadProgress();
+    bindEvents();
+    renderFlashcard();
+    renderThemeFilters();
+    renderQuiz();
+    renderBePractice();
+    renderSpelling();
+    renderProgress();
+    updateHeaderStats();
+    initializeSpeech();
+  </script>
+</body>
+</html>
